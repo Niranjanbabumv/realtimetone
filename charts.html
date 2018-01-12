@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>chartjs-plugin-streaming sample</title>
+	<script src="moment.min.js"></script>
+	<script src="Chart.min.js"></script>
+	<script src="chartjs-plugin-streaming.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<br>
+	<br>
+	<script>
+		var chartColors = {
+			red: 'rgb(255, 99, 132)',
+			orange: 'rgb(255, 159, 64)',
+			yellow: 'rgb(255, 205, 86)',
+			green: 'rgb(75, 192, 192)',
+			blue: 'rgb(54, 162, 235)',
+			purple: 'rgb(153, 102, 255)',
+			grey: 'rgb(201, 203, 207)'
+		};
+
+		function newDate(ms) {
+			return moment().add(ms, 'ms');
+		}
+
+		function onRefresh() {
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.push({
+					x: moment(),
+					y: Math.round(Math.random())
+				});
+			});
+		}
+
+		var color = Chart.helpers.color;
+		var config = {
+			type: 'line',
+			data: {
+				datasets: [{
+					label: 'Anger',
+					backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
+					borderColor: chartColors.red,
+					fill: false,
+					cubicInterpolationMode: 'monotone',
+					data: []
+				}, {
+					label: 'Fear',
+					backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: chartColors.blue,
+					fill: false,
+					cubicInterpolationMode: 'monotone',
+					data: []
+				}, {
+					label: 'Joy',
+					backgroundColor: color(chartColors.yellow).alpha(0.5).rgbString(),
+					borderColor: chartColors.yellow,
+					fill: false,
+					cubicInterpolationMode: 'monotone',
+					data: []
+				}, {
+					label: 'Sadness',
+					backgroundColor: color(chartColors.green).alpha(0.5).rgbString(),
+					borderColor: chartColors.green,
+					fill: false,
+					cubicInterpolationMode: 'monotone',
+					data: []
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Tone Analysis'
+				},
+				scales: {
+					xAxes: [{
+						type: 'realtime',
+						display: false,
+					}],
+					yAxes: [{
+						type: 'linear',
+						display: true,
+					}]
+				},
+				tooltips: {
+					intersect: false
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: false
+				},
+				plugins: {
+					streaming: {
+						duration: 20000,
+						refresh: 1000,
+						delay: 2000,
+						onRefresh: onRefresh
+					}
+				}
+			}
+		};
+
+		var ctx = document.getElementById('canvas').getContext('2d');
+		var myLine = new Chart(ctx, config);
+		
+		var colorNames = Object.keys(chartColors);
+	</script>
+</body>
+</html>

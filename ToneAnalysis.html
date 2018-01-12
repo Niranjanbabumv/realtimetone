@@ -1,0 +1,94 @@
+<html ng-app="myModule">
+<head>
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>		
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script src="moment.min.js"></script>
+	<script src="Chart.min.js"></script>
+	<script src="chartjs-plugin-streaming.js"></script>
+	<script src="app.js"></script>
+	<style>
+		div.tab {
+			overflow: hidden;
+			height: 40px;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+		
+		div.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 9px;
+			transition: 0.3s;
+			font-size: 20px;
+			font-style: italic;
+		}
+
+		div.tab button:hover {
+			background-color: #ddd;
+		}
+
+		div.tab button.active {
+			background-color: #ccc;
+		}
+		
+		img{
+			height : 20px;
+			width : 30px;
+			margin-left: 10px;
+		}
+		
+		div.main{
+			border: 1px solid black;
+			width: 460px;
+			margin-left: 40px;
+		}
+		
+		textarea{
+			height: 200px;
+			width: 460px;
+			border-top: 1px solid black;
+		}
+		
+		.textarea-container {
+			position: relative;
+		}
+		
+		.textarea-container textarea {
+			box-sizing: border-box;
+		}
+		
+		.textarea-container button {
+			position: absolute;
+			bottom: 10;
+			right: 10;
+		}
+		
+	</style>
+</head>
+<body ng-controller="myController">
+	<div class="header">
+		<center><img style="height:60px; width:120px;"ng-src="{{ctsIcon.ctsIconLoc}}" alt="{{ctsIcon.name}}"/><font size="7"><i>Real Time Customer Feedback Analysis</i></font></center>
+	<div>
+	<br><br><br><br>
+	<div class="main">
+		<div class="tab">
+			<button class="tablinks" style="padding-right: 50px;" ng-click = "showAudioSection()">Record Audio<img ng-src="{{micIcon.micIconLoc}}" alt="{{micIcon.name}}"/></button>
+			<button class="tablinks" style="padding-right: 8.5px;" ng-click = "showWritingSection()">Customer Feedback<img ng-src="{{keyIcon.keyIconLoc}}" alt="{{keyIcon.name}}"/></button>
+		</div>
+		<div ng-show="Mic">		
+			<textarea ng-model= "msgFromMic" rows="20" column="500" readonly></textarea>
+		</div>
+		<div class="textarea-container" ng-show="Keyboard">
+			<textarea ng-model= "msgFromKey" rows="20" column="500"></textarea>
+			<button ng-click= "sendDataForAnalysisTab()">Send For Analysis</button>
+		</div>
+    </div>
+	<div class="chart">
+		<canvas id="canvas" width="600" height="200" style="margin-left: 550px; margin-top: -270px;"></canvas>
+	</div>
+</body>
+</html>
